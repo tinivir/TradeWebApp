@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.1.final using JasperReports Library version 6.0.0  -->
+<!-- 2015-05-22T10:59:57 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="363997c2-50a6-4bdb-b449-f6c1315ffb2f">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TradeAdapter "/>
+
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+		<field name="cmdCode" class="java.lang.String">
+			<fieldDescription><![CDATA[cmdCode]]></fieldDescription>
+		</field>
+	<field name="ptCode" class="java.lang.Integer">
+		<fieldDescription><![CDATA[ptCode]]></fieldDescription>
+	</field>
+	<field name="period" class="java.sql.Date">
+		<fieldDescription><![CDATA[period]]></fieldDescription>
+	</field>
+	<field name="tradeValue" class="java.lang.Long">
+		<fieldDescription><![CDATA[tradeValue]]></fieldDescription>
+	</field>
+
+
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="384" splitType="Stretch">
+			<pie3DChart>
+				<chart evaluationTime="Report">
+					<reportElement x="20" y="25" width="440" height="359" uuid="bfe321ed-ebcb-4336-82ca-0f5e6ed9ecc2"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset maxCount="11">
+
+					<keyExpression><![CDATA[Long.toString( $F{tradeValue} )]]></keyExpression>
+					<valueExpression><![CDATA[$F{tradeValue}/100]]></valueExpression>
+					<labelExpression><![CDATA[$F{cmdCode}+","+$F{ptCode}]]></labelExpression>
+				</pieDataset>
+				<pie3DPlot>
+					<plot/>
+					<itemLabel/>
+				</pie3DPlot>
+			</pie3DChart>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="449" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.1.final using JasperReports Library version 6.0.0  -->
+<!-- 2015-05-22T01:52:40 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="maps" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="81de7cbc-4f99-4dad-8ac7-c2f8ddea9c6e">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+
+		<field name="x" class="java.lang.Float">
+			<fieldDescription><![CDATA[x]]></fieldDescription>
+		</field>
+		<field name="y" class="java.lang.Float">
+			<fieldDescription><![CDATA[y]]></fieldDescription>
+		</field>
+
+
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="101" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="116" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="110" splitType="Stretch">
+			<componentElement>
+				<reportElement x="-1" y="-210" width="556" height="320" uuid="2ae7e026-74d7-4798-9a8d-17d36686f9c3"/>
+				<fm:map xmlns:fm="http://jaspersoft.com/fusion" xsi:schemaLocation="http://jaspersoft.com/fusion http://jaspersoft.com/schema/fusion.xsd">
+					<fm:mapNameExpression><![CDATA["USA"]]></fm:mapNameExpression>
+					<fm:mapProperty name="markerFont">
+						<fm:propertyExpression><![CDATA["Arial"]]></fm:propertyExpression>
+					</fm:mapProperty>
+					<fm:mapProperty name="markerFontColor">
+						<fm:propertyExpression><![CDATA[new java.awt.Color(-390907)]]></fm:propertyExpression>
+					</fm:mapProperty>
+
+					<fm:shapeData>
+						<c:item xmlns:c="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<c:itemProperty name="id" value='myCustomShape'/>
+							<c:itemProperty name="type" value="circle"/>
+                                                        <c:itemProperty name="radius" value='4'/>
+
+						</c:item>
+					</fm:shapeData>
+					<c:markerData xmlns:c="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						
+						<c:item>
+							<c:itemProperty name="id" value="20"/>
+							<c:itemProperty name="label" value="Monaco"/>
+							<c:itemProperty name="x" value=$F{x}/>
+							<c:itemProperty name="y" value="450.54"/>
+							<c:itemProperty name="radius" value="30"/>
+							<c:itemProperty name="shapeId" value='myCustomShape'/>
+						</c:item>
+
+					</c:markerData>
+				</fm:map>
+			</componentElement>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="173" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
