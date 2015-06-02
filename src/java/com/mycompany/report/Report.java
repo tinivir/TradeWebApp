@@ -47,6 +47,7 @@ public class Report {
     public int rtCode;
     public String rgCode;
     private static Report instance;
+    public String yr;
     
     public static synchronized Report getInstance() {
         if (instance == null) {
@@ -58,11 +59,15 @@ public class Report {
 
     public Report(String[] per, String[] comm, String[] ptCode, int rtCode, String[] rgCode) {
         this.rtCode=rtCode;
+        this.yr="('";
          this.per = "('";
         for(int i=0;i<per.length;i++){
             this.per += per[i]+"%')";
-            if(i+1!=per.length)
+            this.yr+=new String(per[i].toCharArray(),0,4)+"-01-31%')";
+            if(i+1!=per.length){
                 this.per+=" or period Like('";
+                this.yr+=" or period Like('";
+            }
         }
        //this.per += "%')";
        this.comm=" in (";
@@ -163,7 +168,7 @@ Connection conn = null;
 		}
 		return datas;
 	}
-           public Map< String, Long> getMap() {
+        public Map< String, Long> getMap() {
 		Connection conn = null;
 		PreparedStatement stmt = null;
                  ResultSet res=null;
@@ -180,7 +185,7 @@ Connection conn = null;
 			conn = ds.getConnection();
 
 			
-			String query="SELECT TradeValue, pt.crName, rt.crName,rgDesc FROM ttradedata "
+			String query="SELECT TradeValue, pt.crName, rt.crName,rgDesc,tcommodities.cmdDescE FROM ttradedata "
                                 + "join tcountries pt on pt.crCode=ttradedata.ptCode "
                                 + "join  tcommodities on tcommodities.cmdC=ttradedata.cmdCode and tcommodities.cmdC"+comm
                                 + "join tregimes on tregimes.rgCode=ttradedata.rgCode and tregimes.rgCode"+rgCode
@@ -191,6 +196,7 @@ Connection conn = null;
                         stmt.setInt(1, rtCode);
                         res= stmt.executeQuery();
                         if (res.first()) {
+                            datas.put(res.getString(5),-3);
                         datas.put(res.getString(3),-1);
                         datas.put(res.getString(4),-2);
                         
@@ -199,6 +205,142 @@ Connection conn = null;
                             datas.put(res.getString(2),res.getLong(1));
 				
 			}
+                            
+				
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try { if (res != null) res.close(); } catch (SQLException e) { e.printStackTrace(); }
+			try { if (stmt != null) stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+			try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+		}
+		return datas;
+	}
+        public Map< String, Long> getChartI() {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+                 ResultSet res=null;
+		StringBuffer sb = new StringBuffer();
+                Map datas = new HashMap< String, Long>(); 
+		try {
+			InitialContext ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/trade");
+
+			// This works too
+			// Context envCtx = (Context) ctx.lookup("java:comp/env");
+			// DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+
+			conn = ds.getConnection();
+
+			
+			String query="SELECT ttradedata.TradeValue/ttradedata.NetWeight, pt.crName, rt.crName,rgDesc FROM ttradedata " +
+                                        "join tcountries pt on pt.crCode=ttradedata.ptCode "
+                                        +"join  tcommodities on tcommodities.cmdC=ttradedata.cmdCode and tcommodities.cmdC" +comm
+                                        +"join tregimes on tregimes.rgCode=ttradedata.rgCode and tregimes.rgCode=1"
+                                        +" join tcountries rt on rt.crCode=ttradedata.rtCode and rtCode=?" 
+                                        +" where period like "+yr;
+                               
+                        
+                        stmt = conn.prepareStatement(query);
+                        stmt.setInt(1, rtCode);
+                        res= stmt.executeQuery();
+
+			while (res.next()) {
+                            datas.put(res.getString(2),res.getLong(1));
+				
+			}
+
+                            
+				
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try { if (res != null) res.close(); } catch (SQLException e) { e.printStackTrace(); }
+			try { if (stmt != null) stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+			try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+		}
+		return datas;
+	}
+        public Map< String, Long> getChartE() {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+                 ResultSet res=null;
+		StringBuffer sb = new StringBuffer();
+                Map datas = new HashMap< String, Long>(); 
+		try {
+			InitialContext ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/trade");
+
+			// This works too
+			// Context envCtx = (Context) ctx.lookup("java:comp/env");
+			// DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+
+			conn = ds.getConnection();
+
+			
+			String query="SELECT ttradedata.TradeValue/ttradedata.NetWeight, pt.crName, rt.crName,rgDesc FROM ttradedata " +
+                                        "join tcountries pt on pt.crCode=ttradedata.ptCode "
+                                        +"join  tcommodities on tcommodities.cmdC=ttradedata.cmdCode and tcommodities.cmdC" +comm
+                                        +"join tregimes on tregimes.rgCode=ttradedata.rgCode and tregimes.rgCode=2"
+                                        +" join tcountries rt on rt.crCode=ttradedata.rtCode and rtCode=?" 
+                                        +" where period like "+yr;
+                               
+                        
+                        stmt = conn.prepareStatement(query);
+                        stmt.setInt(1, rtCode);
+                        res= stmt.executeQuery();
+
+			while (res.next()) {
+                            datas.put(res.getString(2),res.getLong(1));
+				
+			}
+
+                            
+				
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try { if (res != null) res.close(); } catch (SQLException e) { e.printStackTrace(); }
+			try { if (stmt != null) stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+			try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+		}
+		return datas;
+	}
+        public Map< String, Long> getChartP() {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+                 ResultSet res=null;
+		StringBuffer sb = new StringBuffer();
+                Map datas = new HashMap< String, Long>(); 
+		try {
+			InitialContext ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/trade");
+
+			// This works too
+			// Context envCtx = (Context) ctx.lookup("java:comp/env");
+			// DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+
+			conn = ds.getConnection();
+
+			
+			String query="select  TradeValue,period, pt.crName  from ttradedata "
+                                + "join tcountries pt on pt.crCode=ttradedata.ptCode "
+                                + "where rgCode=2 and cmdCode"+comm
+                                + " and period like ('2014-01-01')"//+per
+                                +" ORDER by TradeValue desc LIMIT 10 ;";
+                               
+                        
+                        stmt = conn.prepareStatement(query);
+                        res= stmt.executeQuery();
+
+			while (res.next()) {
+                            datas.put(res.getString(3),res.getLong(1));
+				
+			}
+
                             
 				
 			

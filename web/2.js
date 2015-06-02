@@ -1,51 +1,66 @@
 
-            var chart;
-            var chartData = [
-                {
-                    "year": 2009,
-                    "income": 23.5,
-                    "expenses": 18.1
-                },
-                {
-                    "year": 2010,
-                    "income": 26.2,
-                    "expenses": 22.8
-                },
-                {
-                    "year": 2011,
-                    "income": 30.1,
-                    "expenses": 23.9
-                },
-                {
-                    "year": 2012,
-                    "income": 29.5,
-                    "expenses": 25.1
-                },
-                {
-                    "year": 2013,
-                    "income": 30.6,
-                    "expenses": 27.2,
-                    "dashLengthLine": 5
-                },
-                {
-                    "year": 2014,
-                    "income": 34.1,
-                    "expenses": 29.9,
-                    "dashLengthColumn": 5,
-                    "alpha":0.2,
-                    "additional":"(projection)"
-                }
+            
+            var val =JSON.parse(document.getElementById("text").value);
+            
+            var chartValI = val.sec;
+            var chartValE = val.third;
+            var chartValP = val.four;
+            console.log(chartValP);
+            var mapData=[];
+            var values=val.first;
+            var chartData = [];
+            var a=0;
+            for(var key in chartValI){
+                chartData[a++]={
+                    "country": key,
+                    "income": chartValI[key],
+                    "expenses": chartValE[key]
 
-            ];
+                };
+            }
+            var data = [];
+            a=0;
+
+            var tuples = [];
+
+            for (var key in chartValP) tuples.push([key, chartValP[key]]);
+
+            tuples.sort(function(a, b) {
+                a = a[1];
+                b = b[1];
+
+                return a > b ? -1 : (a < b ? 1 : 0);
+            });
+
+            for (var i = 0; i < tuples.length; i++) {
+
+                data[a++]={
+                    "title": tuples[i][0],
+                    "value": tuples[i][1]
+
+                };
+                // do something with key and value
+            }
+            console.log(data);
+
+                
+            
+
+
 
 
             AmCharts.ready(function () {
                 // SERIAL CHART
-                chart = new AmCharts.AmSerialChart();
+               var chart = new AmCharts.AmSerialChart();
                 chart.path = "../amcharts/";
                 chart.dataProvider = chartData;
-                chart.categoryField = "year";
+                chart.categoryField = "country";
                 chart.startDuration = 1;
+                
+                var categoryAxis = chart.categoryAxis;
+                categoryAxis.labelRotation = 45; // this line makes category values to be rotated
+
+                categoryAxis.gridPosition = "start";
 
                 chart.handDrawn = true;
                 chart.handDrawnScatter = 3;
@@ -94,14 +109,33 @@
                 var legend = new AmCharts.AmLegend();
                 legend.useGraphSettings = true;
                 chart.addLegend(legend);
+                chart.write("chartdiv");
+                });
+                //chartPyramid
+                 AmCharts.ready(function () {
+                var chart = new AmCharts.AmFunnelChart();
+                chart.rotate = false;
+                chart.titleField = "title";
+                chart.balloon.fixedPosition = true;
+                chart.marginRight = 210;
+                chart.marginLeft = 15;
+                chart.labelPosition = "right";
+                chart.funnelAlpha = 0.9;
+                chart.valueField = "value";
+                chart.startX = -500;
+                chart.dataProvider = data;
+                chart.startAlpha = 0;
+                
+                chart.write("chart1div");
+
 
                 // WRITE
-                chart.write("chartdiv");
+                
             });
         
 
-var mapData=[]; 
-var values =JSON.parse(document.getElementById("text").value);
+ 
+
 
                         var latlong = {};
 			latlong["AD"] = {
@@ -1911,13 +1945,14 @@ var values =JSON.parse(document.getElementById("text").value);
 				"value": 12754378,
 				"color": "#de4c4f"
 			}];
-                        var name;
-                        var regime;
+                        var name="";
+                        var regime="";
+                        var cmd="";
                         for(var i = 0; i < mapData.length; i++){
                         
                             mapData[i].value = 0;
                             if(values[mapData[i].name])
-                            mapData[i].value=values[mapData[i].name];
+                                mapData[i].value=values[mapData[i].name];
                         //if(mapData[i].name=="")
                         }
                         
@@ -1926,12 +1961,13 @@ var values =JSON.parse(document.getElementById("text").value);
                         if(values[key]<0){
                         
                             if(values[key]===-1){
-                                name=key;
+                                name+=key;
                                 console.log(name);
                             }
                             else if(values[key]===-2)
-                                regime=key;
-                            console.log(regime);
+                                regime+=key;
+                            else if(values[key]===-3)
+                                cmd+=key;
                         }
                     }
 
@@ -1961,7 +1997,7 @@ var values =JSON.parse(document.getElementById("text").value);
 				map.path = "../ammap/";
 
 				map.addTitle(name+" "+regime, 14);
-				map.addTitle("source: Gapminder", 11);
+				map.addTitle(cmd, 11);
 				map.areasSettings = {
 					unlistedAreasColor: "#FFFFFF",
 					unlistedAreasAlpha: 0.1

@@ -70,11 +70,13 @@ public class SomeServlet extends HttpServlet {
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     Report rep=Report.getInstance();
     Map datas=rep.getMap();
-    String json = new Gson().toJson(datas);
+    Map chartI=rep.getChartI();
+    Map chartE=rep.getChartE();
+    Map chartP=rep.getChartP();
+    String[] json ={ new Gson().toJson(datas),new Gson().toJson(chartI),new Gson().toJson(chartE),new Gson().toJson(chartP) };
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
-    response.getWriter().write(json);  
-    response.getWriter().write(json);  // Write response body.
+    response.getWriter().write("{\"first\":"+json[0]+",\"sec\":"+json[1]+",\"third\":"+json[2]+",\"four\":"+json[3]+"}");
 }
 
     /**
