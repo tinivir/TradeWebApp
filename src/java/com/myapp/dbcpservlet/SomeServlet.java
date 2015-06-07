@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import javax.naming.InitialContext;
 import javax.servlet.ServletException;
@@ -23,7 +24,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-
 /**
  *
  * @author tiniv_000
@@ -72,7 +72,10 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
     Map datas=rep.getMap();
     Map chartI=rep.getChartI();
     Map chartE=rep.getChartE();
-    Map chartP=rep.getChartP();
+    
+    Map chartP=rep.getChartP();//rep.getChartP();
+    int i=0;
+   
     String[] json ={ new Gson().toJson(datas),new Gson().toJson(chartI),new Gson().toJson(chartE),new Gson().toJson(chartP) };
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");

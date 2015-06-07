@@ -8,6 +8,7 @@ package com.mycompany.report;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import static java.lang.System.in;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -189,11 +190,11 @@ Connection conn = null;
                                 + "join tcountries pt on pt.crCode=ttradedata.ptCode "
                                 + "join  tcommodities on tcommodities.cmdC=ttradedata.cmdCode and tcommodities.cmdC"+comm
                                 + "join tregimes on tregimes.rgCode=ttradedata.rgCode and tregimes.rgCode"+rgCode
-                                + "join tcountries rt on rt.crCode=ttradedata.rtCode and rtCode=?"
-                                + " where period like "+per;
+                                + "join tcountries rt on rt.crCode=ttradedata.rtCode and rtCode "+ptCode
+                                + " where period like "+per+" and period NOT LIKE ('%31')";
                         
                         stmt = conn.prepareStatement(query);
-                        stmt.setInt(1, rtCode);
+                        //stmt.setInt(1, rtCode);
                         res= stmt.executeQuery();
                         if (res.first()) {
                             datas.put(res.getString(5),-3);
@@ -202,7 +203,13 @@ Connection conn = null;
                         
                         }
 			while (res.next()) {
-                            datas.put(res.getString(2),res.getLong(1));
+                              String tmp=res.getString(2);
+                            Long t= res.getLong(1);
+                            if(datas.containsKey(tmp)) {
+                               
+                                t+=(Long) datas.get(tmp);
+                            }
+                            datas.put(tmp,t);
 				
 			}
                             
@@ -234,16 +241,16 @@ Connection conn = null;
 			conn = ds.getConnection();
 
 			
-			String query="SELECT ttradedata.TradeValue/ttradedata.NetWeight, pt.crName, rt.crName,rgDesc FROM ttradedata " +
+			String query="SELECT 100*ttradedata.TradeValue/ttradedata.NetWeight, pt.crName, rt.crName,rgDesc FROM ttradedata " +
                                         "join tcountries pt on pt.crCode=ttradedata.ptCode "
                                         +"join  tcommodities on tcommodities.cmdC=ttradedata.cmdCode and tcommodities.cmdC" +comm
                                         +"join tregimes on tregimes.rgCode=ttradedata.rgCode and tregimes.rgCode=1"
-                                        +" join tcountries rt on rt.crCode=ttradedata.rtCode and rtCode=?" 
+                                        +" join tcountries rt on rt.crCode=ttradedata.rtCode and rtCode "+ptCode 
                                         +" where period like "+yr;
                                
                         
                         stmt = conn.prepareStatement(query);
-                        stmt.setInt(1, rtCode);
+                       // stmt.setInt(1, rtCode);
                         res= stmt.executeQuery();
 
 			while (res.next()) {
@@ -280,19 +287,20 @@ Connection conn = null;
 			conn = ds.getConnection();
 
 			
-			String query="SELECT ttradedata.TradeValue/ttradedata.NetWeight, pt.crName, rt.crName,rgDesc FROM ttradedata " +
+			String query="SELECT 100*ttradedata.TradeValue/ttradedata.NetWeight, pt.crName, rt.crName,rgDesc FROM ttradedata " +
                                         "join tcountries pt on pt.crCode=ttradedata.ptCode "
                                         +"join  tcommodities on tcommodities.cmdC=ttradedata.cmdCode and tcommodities.cmdC" +comm
                                         +"join tregimes on tregimes.rgCode=ttradedata.rgCode and tregimes.rgCode=2"
-                                        +" join tcountries rt on rt.crCode=ttradedata.rtCode and rtCode=?" 
+                                        +" join tcountries rt on rt.crCode=ttradedata.rtCode and rtCode "+ptCode 
                                         +" where period like "+yr;
                                
                         
                         stmt = conn.prepareStatement(query);
-                        stmt.setInt(1, rtCode);
+                        //stmt.setInt(1, rtCode);
                         res= stmt.executeQuery();
 
 			while (res.next()) {
+                            
                             datas.put(res.getString(2),res.getLong(1));
 				
 			}
@@ -309,12 +317,12 @@ Connection conn = null;
 		}
 		return datas;
 	}
-        public Map< String, Long> getChartP() {
+        public HashMap< String, Long> getChartP() {
 		Connection conn = null;
 		PreparedStatement stmt = null;
                  ResultSet res=null;
 		StringBuffer sb = new StringBuffer();
-                Map datas = new HashMap< String, Long>(); 
+                HashMap datas = new HashMap< String, Long>(); 
 		try {
 			InitialContext ctx = new InitialContext();
 			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/trade");
@@ -328,19 +336,26 @@ Connection conn = null;
 			
 			String query="select  TradeValue,period, pt.crName  from ttradedata "
                                 + "join tcountries pt on pt.crCode=ttradedata.ptCode "
-                                + "where rgCode=2 and cmdCode"+comm
-                                + " and period like ('2014-01-01')"//+per
-                                +" ORDER by TradeValue desc LIMIT 10 ;";
+                                +" join tcountries rt on rt.crCode=ttradedata.rtCode and rtCode "+ptCode 
+                                + " where rgCode"+rgCode+" and cmdCode"+comm
+                                + " and period like "+per+" and period NOT LIKE ('%31')"
+                                +" ORDER by TradeValue desc  ;";
                                
                         
                         stmt = conn.prepareStatement(query);
                         res= stmt.executeQuery();
 
 			while (res.next()) {
-                            datas.put(res.getString(3),res.getLong(1));
+                            String tmp=res.getString(3);
+                            Long t= res.getLong(1);
+                            if(datas.containsKey(tmp)) {
+                               
+                                t+=(Long) datas.get(tmp);
+                            }
+                            datas.put(tmp,t);
 				
 			}
-
+                        
                             
 				
 			

@@ -81,7 +81,7 @@
                 </tr>
                 <tr>
                     <td>  
-                         <input type="text" name="periods" />
+                         <input type="text" name="periods"  multiple style="width:350px;" data-placeholder="Choose a period..." />
                     </td>
                 </tr>
             </tbody>

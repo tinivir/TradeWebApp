@@ -3,18 +3,32 @@
             var val =JSON.parse(document.getElementById("text").value);
             
             var chartValI = val.sec;
+            console.log(chartValI);
             var chartValE = val.third;
+            console.log(chartValE);
             var chartValP = val.four;
             console.log(chartValP);
             var mapData=[];
             var values=val.first;
             var chartData = [];
             var a=0;
-            for(var key in chartValI){
+            var im;
+            var exp;
+            var s;
+            if(Object.keys(chartValE).length>Object.keys(chartValI).length)
+                s=chartValE;
+            else s=chartValI;
+            console.log(s);
+            for(var key in s){
+                if(chartValI[key]) im=chartValI[key];
+                else im=0;
+                if(chartValE[key]) exp=chartValE[key];
+                else exp=0;
+                
                 chartData[a++]={
                     "country": key,
-                    "income": chartValI[key],
-                    "expenses": chartValE[key]
+                    "income": im,
+                    "expenses": exp
 
                 };
             }
@@ -31,8 +45,10 @@
 
                 return a > b ? -1 : (a < b ? 1 : 0);
             });
-
-            for (var i = 0; i < tuples.length; i++) {
+            var length;
+            if(tuples.length>10) length=10;
+            else length=tuples.length;
+            for (var i = 0; i <length ; i++) {
 
                 data[a++]={
                     "title": tuples[i][0],
